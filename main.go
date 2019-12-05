@@ -5,7 +5,6 @@ import (
 	"github.com/micro/go-micro/util/log"
 	"order-srv/handler"
 	order "order-srv/proto/order"
-	"order-srv/subscriber"
 )
 
 func main() {
@@ -21,11 +20,6 @@ func main() {
 	// Register Handler
 	order.RegisterOrderHandler(service.Server(), new(handler.Order))
 
-	// Register Struct as Subscriber
-	micro.RegisterSubscriber("go.micro.srv.order", service.Server(), new(subscriber.Order))
-
-	// Register Function as Subscriber
-	micro.RegisterSubscriber("go.micro.srv.order", service.Server(), subscriber.Handler)
 
 	// Run service
 	if err := service.Run(); err != nil {

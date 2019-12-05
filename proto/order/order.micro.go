@@ -34,8 +34,7 @@ var _ server.Option
 // Client API for Order service
 
 type OrderService interface {
-	Call(ctx context.Context, in *Request, opts ...client.CallOption) (*Response, error)
-	Stream(ctx context.Context, in *StreamingRequest, opts ...client.CallOption) (Order_StreamService, error)
+	FindOrderByUserId(ctx context.Context, in *UserId, opts ...client.CallOption) (*Orders, error)
 }
 
 type orderService struct {
@@ -56,9 +55,9 @@ func NewOrderService(name string, c client.Client) OrderService {
 	}
 }
 
-func (c *orderService) Call(ctx context.Context, in *Request, opts ...client.CallOption) (*Response, error) {
-	req := c.c.NewRequest(c.name, "Order.Call", in)
-	out := new(Response)
+func (c *orderService) FindOrderByUserId(ctx context.Context, in *UserId, opts ...client.CallOption) (*Orders, error) {
+	req := c.c.NewRequest(c.name, "Order.FindOrderByUserId", in)
+	out := new(Orders)
 	err := c.c.Call(ctx, req, out, opts...)
 	if err != nil {
 		return nil, err
@@ -66,61 +65,15 @@ func (c *orderService) Call(ctx context.Context, in *Request, opts ...client.Cal
 	return out, nil
 }
 
-func (c *orderService) Stream(ctx context.Context, in *StreamingRequest, opts ...client.CallOption) (Order_StreamService, error) {
-	req := c.c.NewRequest(c.name, "Order.Stream", &StreamingRequest{})
-	stream, err := c.c.Stream(ctx, req, opts...)
-	if err != nil {
-		return nil, err
-	}
-	if err := stream.Send(in); err != nil {
-		return nil, err
-	}
-	return &orderServiceStream{stream}, nil
-}
-
-type Order_StreamService interface {
-	SendMsg(interface{}) error
-	RecvMsg(interface{}) error
-	Close() error
-	Recv() (*StreamingResponse, error)
-}
-
-type orderServiceStream struct {
-	stream client.Stream
-}
-
-func (x *orderServiceStream) Close() error {
-	return x.stream.Close()
-}
-
-func (x *orderServiceStream) SendMsg(m interface{}) error {
-	return x.stream.Send(m)
-}
-
-func (x *orderServiceStream) RecvMsg(m interface{}) error {
-	return x.stream.Recv(m)
-}
-
-func (x *orderServiceStream) Recv() (*StreamingResponse, error) {
-	m := new(StreamingResponse)
-	err := x.stream.Recv(m)
-	if err != nil {
-		return nil, err
-	}
-	return m, nil
-}
-
 // Server API for Order service
 
 type OrderHandler interface {
-	Call(context.Context, *Request, *Response) error
-	Stream(context.Context, *StreamingRequest, Order_StreamStream) error
+	FindOrderByUserId(context.Context, *UserId, *Orders) error
 }
 
 func RegisterOrderHandler(s server.Server, hdlr OrderHandler, opts ...server.HandlerOption) error {
 	type order interface {
-		Call(ctx context.Context, in *Request, out *Response) error
-		Stream(ctx context.Context, stream server.Stream) error
+		FindOrderByUserId(ctx context.Context, in *UserId, out *Orders) error
 	}
 	type Order struct {
 		order
@@ -133,41 +86,6 @@ type orderHandler struct {
 	OrderHandler
 }
 
-func (h *orderHandler) Call(ctx context.Context, in *Request, out *Response) error {
-	return h.OrderHandler.Call(ctx, in, out)
-}
-
-func (h *orderHandler) Stream(ctx context.Context, stream server.Stream) error {
-	m := new(StreamingRequest)
-	if err := stream.Recv(m); err != nil {
-		return err
-	}
-	return h.OrderHandler.Stream(ctx, m, &orderStreamStream{stream})
-}
-
-type Order_StreamStream interface {
-	SendMsg(interface{}) error
-	RecvMsg(interface{}) error
-	Close() error
-	Send(*StreamingResponse) error
-}
-
-type orderStreamStream struct {
-	stream server.Stream
-}
-
-func (x *orderStreamStream) Close() error {
-	return x.stream.Close()
-}
-
-func (x *orderStreamStream) SendMsg(m interface{}) error {
-	return x.stream.Send(m)
-}
-
-func (x *orderStreamStream) RecvMsg(m interface{}) error {
-	return x.stream.Recv(m)
-}
-
-func (x *orderStreamStream) Send(m *StreamingResponse) error {
-	return x.stream.Send(m)
+func (h *orderHandler) FindOrderByUserId(ctx context.Context, in *UserId, out *Orders) error {
+	return h.OrderHandler.FindOrderByUserId(ctx, in, out)
 }

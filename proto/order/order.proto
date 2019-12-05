@@ -3,35 +3,25 @@ syntax = "proto3";
 package go.micro.srv.order;
 
 service Order {
+	rpc FindOrderByUserId(UserId) returns (Orders) {}
 
-	rpc Call(Request) returns (Response) {}
-	rpc Stream(StreamingRequest) returns (stream StreamingResponse) {}
+}
+//用户ID
+message UserId {
+	string userId = 1;
 }
 
-message Message {
-	string say = 1;
+//返回订单详情
+message OrderDetail {
+	//订单Id
+	int64 OrderId = 1;
+	//订单号
+	string OrderNum = 2;
+}
+//返回订单
+message Orders {
+    repeated OrderDetail orders = 1;
 }
 
-message Request {
-	string name = 1;
-}
 
-message Response {
-	string msg = 1;
-}
 
-message StreamingRequest {
-	int64 count = 1;
-}
-
-message StreamingResponse {
-	int64 count = 1;
-}
-
-message Ping {
-	int64 stroke = 1;
-}
-
-message Pong {
-	int64 stroke = 1;
-}

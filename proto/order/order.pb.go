@@ -8,13 +8,9 @@ It is generated from these files:
 	proto/order/order.proto
 
 It has these top-level messages:
-	Message
-	Request
-	Response
-	StreamingRequest
-	StreamingResponse
-	Ping
-	Pong
+	UserId
+	OrderDetail
+	Orders
 */
 package go_micro_srv_order
 
@@ -33,146 +29,87 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.ProtoPackageIsVersion2 // please upgrade the proto package
 
-type Message struct {
-	Say string `protobuf:"bytes,1,opt,name=say" json:"say,omitempty"`
+// 用户ID
+type UserId struct {
+	UserId string `protobuf:"bytes,1,opt,name=userId" json:"userId,omitempty"`
 }
 
-func (m *Message) Reset()                    { *m = Message{} }
-func (m *Message) String() string            { return proto.CompactTextString(m) }
-func (*Message) ProtoMessage()               {}
-func (*Message) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{0} }
+func (m *UserId) Reset()                    { *m = UserId{} }
+func (m *UserId) String() string            { return proto.CompactTextString(m) }
+func (*UserId) ProtoMessage()               {}
+func (*UserId) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{0} }
 
-func (m *Message) GetSay() string {
+func (m *UserId) GetUserId() string {
 	if m != nil {
-		return m.Say
+		return m.UserId
 	}
 	return ""
 }
 
-type Request struct {
-	Name string `protobuf:"bytes,1,opt,name=name" json:"name,omitempty"`
+// 返回订单详情
+type OrderDetail struct {
+	// 订单Id
+	OrderId int64 `protobuf:"varint,1,opt,name=OrderId" json:"OrderId,omitempty"`
+	// 订单号
+	OrderNum string `protobuf:"bytes,2,opt,name=OrderNum" json:"OrderNum,omitempty"`
 }
 
-func (m *Request) Reset()                    { *m = Request{} }
-func (m *Request) String() string            { return proto.CompactTextString(m) }
-func (*Request) ProtoMessage()               {}
-func (*Request) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{1} }
+func (m *OrderDetail) Reset()                    { *m = OrderDetail{} }
+func (m *OrderDetail) String() string            { return proto.CompactTextString(m) }
+func (*OrderDetail) ProtoMessage()               {}
+func (*OrderDetail) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{1} }
 
-func (m *Request) GetName() string {
+func (m *OrderDetail) GetOrderId() int64 {
 	if m != nil {
-		return m.Name
+		return m.OrderId
+	}
+	return 0
+}
+
+func (m *OrderDetail) GetOrderNum() string {
+	if m != nil {
+		return m.OrderNum
 	}
 	return ""
 }
 
-type Response struct {
-	Msg string `protobuf:"bytes,1,opt,name=msg" json:"msg,omitempty"`
+// 返回订单
+type Orders struct {
+	Orders []*OrderDetail `protobuf:"bytes,1,rep,name=orders" json:"orders,omitempty"`
 }
 
-func (m *Response) Reset()                    { *m = Response{} }
-func (m *Response) String() string            { return proto.CompactTextString(m) }
-func (*Response) ProtoMessage()               {}
-func (*Response) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{2} }
+func (m *Orders) Reset()                    { *m = Orders{} }
+func (m *Orders) String() string            { return proto.CompactTextString(m) }
+func (*Orders) ProtoMessage()               {}
+func (*Orders) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{2} }
 
-func (m *Response) GetMsg() string {
+func (m *Orders) GetOrders() []*OrderDetail {
 	if m != nil {
-		return m.Msg
+		return m.Orders
 	}
-	return ""
-}
-
-type StreamingRequest struct {
-	Count int64 `protobuf:"varint,1,opt,name=count" json:"count,omitempty"`
-}
-
-func (m *StreamingRequest) Reset()                    { *m = StreamingRequest{} }
-func (m *StreamingRequest) String() string            { return proto.CompactTextString(m) }
-func (*StreamingRequest) ProtoMessage()               {}
-func (*StreamingRequest) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{3} }
-
-func (m *StreamingRequest) GetCount() int64 {
-	if m != nil {
-		return m.Count
-	}
-	return 0
-}
-
-type StreamingResponse struct {
-	Count int64 `protobuf:"varint,1,opt,name=count" json:"count,omitempty"`
-}
-
-func (m *StreamingResponse) Reset()                    { *m = StreamingResponse{} }
-func (m *StreamingResponse) String() string            { return proto.CompactTextString(m) }
-func (*StreamingResponse) ProtoMessage()               {}
-func (*StreamingResponse) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{4} }
-
-func (m *StreamingResponse) GetCount() int64 {
-	if m != nil {
-		return m.Count
-	}
-	return 0
-}
-
-type Ping struct {
-	Stroke int64 `protobuf:"varint,1,opt,name=stroke" json:"stroke,omitempty"`
-}
-
-func (m *Ping) Reset()                    { *m = Ping{} }
-func (m *Ping) String() string            { return proto.CompactTextString(m) }
-func (*Ping) ProtoMessage()               {}
-func (*Ping) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{5} }
-
-func (m *Ping) GetStroke() int64 {
-	if m != nil {
-		return m.Stroke
-	}
-	return 0
-}
-
-type Pong struct {
-	Stroke int64 `protobuf:"varint,1,opt,name=stroke" json:"stroke,omitempty"`
-}
-
-func (m *Pong) Reset()                    { *m = Pong{} }
-func (m *Pong) String() string            { return proto.CompactTextString(m) }
-func (*Pong) ProtoMessage()               {}
-func (*Pong) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{6} }
-
-func (m *Pong) GetStroke() int64 {
-	if m != nil {
-		return m.Stroke
-	}
-	return 0
+	return nil
 }
 
 func init() {
-	proto.RegisterType((*Message)(nil), "go.micro.srv.order.Message")
-	proto.RegisterType((*Request)(nil), "go.micro.srv.order.Request")
-	proto.RegisterType((*Response)(nil), "go.micro.srv.order.Response")
-	proto.RegisterType((*StreamingRequest)(nil), "go.micro.srv.order.StreamingRequest")
-	proto.RegisterType((*StreamingResponse)(nil), "go.micro.srv.order.StreamingResponse")
-	proto.RegisterType((*Ping)(nil), "go.micro.srv.order.Ping")
-	proto.RegisterType((*Pong)(nil), "go.micro.srv.order.Pong")
+	proto.RegisterType((*UserId)(nil), "go.micro.srv.order.UserId")
+	proto.RegisterType((*OrderDetail)(nil), "go.micro.srv.order.OrderDetail")
+	proto.RegisterType((*Orders)(nil), "go.micro.srv.order.Orders")
 }
 
 func init() { proto.RegisterFile("proto/order/order.proto", fileDescriptor0) }
 
 var fileDescriptor0 = []byte{
-	// 248 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x84, 0x91, 0xc1, 0x4a, 0x03, 0x31,
-	0x10, 0x86, 0x5d, 0xba, 0xdd, 0xea, 0x9c, 0xea, 0x20, 0x2a, 0x6d, 0x15, 0x09, 0x0a, 0xf5, 0x12,
-	0x45, 0x1f, 0xa1, 0x67, 0x51, 0xd6, 0x93, 0xc7, 0x58, 0x87, 0xb0, 0xd8, 0x64, 0x6a, 0x26, 0x15,
-	0x7c, 0x22, 0x5f, 0x53, 0x9a, 0xcd, 0x82, 0xe8, 0x8a, 0x97, 0x30, 0x93, 0xef, 0x9f, 0x9f, 0x7f,
-	0x12, 0x38, 0x5a, 0x07, 0x8e, 0x7c, 0xc5, 0xe1, 0x85, 0x42, 0x7b, 0xea, 0x74, 0x83, 0x68, 0x59,
-	0xbb, 0x66, 0x19, 0x58, 0x4b, 0x78, 0xd7, 0x89, 0xa8, 0x29, 0x8c, 0xee, 0x48, 0xc4, 0x58, 0xc2,
-	0x31, 0x0c, 0xc4, 0x7c, 0x1c, 0x17, 0x67, 0xc5, 0x7c, 0xaf, 0xde, 0x96, 0xea, 0x04, 0x46, 0x35,
-	0xbd, 0x6d, 0x48, 0x22, 0x22, 0x94, 0xde, 0x38, 0xca, 0x34, 0xd5, 0x6a, 0x06, 0xbb, 0x35, 0xc9,
-	0x9a, 0xbd, 0xa4, 0x61, 0x27, 0xb6, 0x1b, 0x76, 0x62, 0xd5, 0x1c, 0xc6, 0x8f, 0x31, 0x90, 0x71,
-	0x8d, 0xb7, 0x9d, 0xcb, 0x01, 0x0c, 0x97, 0xbc, 0xf1, 0x31, 0xe9, 0x06, 0x75, 0xdb, 0xa8, 0x4b,
-	0xd8, 0xff, 0xa6, 0xcc, 0x86, 0xfd, 0xd2, 0x53, 0x28, 0x1f, 0x1a, 0x6f, 0xf1, 0x10, 0x2a, 0x89,
-	0x81, 0x5f, 0x29, 0xe3, 0xdc, 0x25, 0xce, 0x7f, 0xf3, 0x9b, 0xcf, 0x02, 0x86, 0xf7, 0xdb, 0xc5,
-	0x71, 0x01, 0xe5, 0xc2, 0xac, 0x56, 0x38, 0xd5, 0xbf, 0x5f, 0x45, 0xe7, 0xbc, 0x93, 0x59, 0x3f,
-	0x6c, 0x23, 0xaa, 0x1d, 0x7c, 0x82, 0xaa, 0x4d, 0x8e, 0xe7, 0x7d, 0xca, 0x9f, 0xfb, 0x4f, 0x2e,
-	0xfe, 0x51, 0x75, 0xc6, 0xd7, 0xc5, 0x73, 0x95, 0xfe, 0xec, 0xf6, 0x2b, 0x00, 0x00, 0xff, 0xff,
-	0x55, 0xba, 0xca, 0x91, 0xce, 0x01, 0x00, 0x00,
+	// 192 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0x12, 0x2f, 0x28, 0xca, 0x2f,
+	0xc9, 0xd7, 0xcf, 0x2f, 0x4a, 0x49, 0x2d, 0x82, 0x90, 0x7a, 0x60, 0x11, 0x21, 0xa1, 0xf4, 0x7c,
+	0xbd, 0xdc, 0xcc, 0xe4, 0xa2, 0x7c, 0xbd, 0xe2, 0xa2, 0x32, 0x3d, 0xb0, 0x8c, 0x92, 0x02, 0x17,
+	0x5b, 0x68, 0x71, 0x6a, 0x91, 0x67, 0x8a, 0x90, 0x18, 0x17, 0x5b, 0x29, 0x98, 0x25, 0xc1, 0xa8,
+	0xc0, 0xa8, 0xc1, 0x19, 0x04, 0xe5, 0x29, 0x39, 0x73, 0x71, 0xfb, 0x83, 0x94, 0xba, 0xa4, 0x96,
+	0x24, 0x66, 0xe6, 0x08, 0x49, 0x70, 0xb1, 0x83, 0xb9, 0x50, 0x75, 0xcc, 0x41, 0x30, 0xae, 0x90,
+	0x14, 0x17, 0x07, 0x98, 0xe9, 0x57, 0x9a, 0x2b, 0xc1, 0x04, 0x36, 0x02, 0xce, 0x57, 0x72, 0xe4,
+	0x62, 0x03, 0xb3, 0x8b, 0x85, 0xcc, 0xb9, 0xd8, 0xc0, 0x36, 0x17, 0x4b, 0x30, 0x2a, 0x30, 0x6b,
+	0x70, 0x1b, 0xc9, 0xeb, 0x61, 0xba, 0x4a, 0x0f, 0xc9, 0xc2, 0x20, 0xa8, 0x72, 0xa3, 0x30, 0x2e,
+	0x56, 0xb0, 0xb0, 0x90, 0x2f, 0x97, 0xa0, 0x5b, 0x66, 0x5e, 0x0a, 0x98, 0xe3, 0x54, 0x09, 0x75,
+	0xbd, 0x14, 0x36, 0x63, 0x20, 0x72, 0x52, 0x52, 0x38, 0xad, 0x28, 0x56, 0x62, 0x48, 0x62, 0x03,
+	0x07, 0x8e, 0x31, 0x20, 0x00, 0x00, 0xff, 0xff, 0xbd, 0x9a, 0xbb, 0xdb, 0x37, 0x01, 0x00, 0x00,
 }

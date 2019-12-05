@@ -7,7 +7,7 @@ proto:
 	sudo docker run --rm -v $(PWD):$(PWD) -w $(PWD) cap1573/protoc -I ./ --go_out=./ --micro_out=./  ./proto/order/*.proto
 
 .PHONY: build
-build: proto
+build:
 	go build -o order-srv main.go plugin.go
 
 .PHONY: test

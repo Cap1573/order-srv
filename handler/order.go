@@ -2,7 +2,7 @@ package handler
 
 import (
 	"context"
-	order "order-srv/proto/order"
+	order "github.com/Cap1573/order-srv/proto/order"
 )
 
 type Order struct{}

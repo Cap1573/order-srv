@@ -1,10 +1,10 @@
 package main
 
 import (
+	"github.com/Cap1573/order-srv/handler"
+	order "github.com/Cap1573/order-srv/proto/order"
 	"github.com/micro/go-micro"
 	"github.com/micro/go-micro/util/log"
-	"order-srv/handler"
-	order "order-srv/proto/order"
 )
 
 func main() {
@@ -18,6 +18,7 @@ func main() {
 	service.Init()
 
 	// Register Handler
+
 	order.RegisterOrderHandler(service.Server(), new(handler.Order))
 
 

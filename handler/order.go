@@ -8,7 +8,7 @@ import (
 type Order struct{}
 
 func (h *Order) FindOrderByUserId(ctx context.Context, req *order.UserId, rsp *order.Orders) error {
-	od:=&order.OrderDetail{OrderId:1,OrderNum:"1"}
+	od:=&order.OrderDetail{OrderId:1,OrderNum:"11123123"}
 	rsp.Orders = append(rsp.Orders, od)
 	return nil
 }
